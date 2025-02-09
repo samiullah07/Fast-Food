@@ -1,40 +1,32 @@
 from Products.models import ProductDetail
 
 class Cart():
-	def __init__(self, request):
-		self.session = request.session
-
-		cart = self.session.get("session_key")
-
-		if "session_key" not in request.session:
-			cart = self.session["session_key"] = {}
-
-
-		self.cart = cart
-
-	
+    def __init__(self, request):
+        self.session = request.session
+        cart = self.session.get("session_key")
+        if "session_key" not in request.session:
+            cart = self.session["session_key"] = {}
+        self.cart = cart
+        
 
 
+    def add(self, product):
+        product_id = str(product.id)
+        
+        if product_id not in self.cart:
+            self.cart[product_id] = {"price": str(product.prduct_price), "quantity": 1}
+        else:
+            self.cart[product_id]["quantity"] = self.cart[product_id].get("quantity", 0) + 1
 
-	def add(self, product):
-		product_id = str(product.id)
-		
-		
-		if product_id in self.cart:
-			pass  # Logic for handling existing product in cart can go here
-		else:
-			self.cart[product_id] = {"price":str(product.price)}
+        self.save()
 
-		self.session.modified = True
+    def __len__(self):
+        return sum(item.get('quantity', 0) for item in self.cart.values())
 
-	# def __len__(self):
-	# 	return len(self.cart)
+    def save(self):
+        self.session.modified = True
 
-	# def get_prods(self):
-	# 	# Get ids from cart
-	# 	product_ids = self.cart.keys()
-	# 	# Use ids to lookup products in database model
-	# 	products = ProductDetail.objects.filter(id__in=product_ids)
-
-	# 	# Return those looked up products
-	# 	return products
+    def get_prods(self):
+        product_ids = self.cart.keys()
+        products = ProductDetail.objects.filter(id__in=product_ids)
+        return products

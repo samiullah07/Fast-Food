@@ -15,6 +15,7 @@
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="{% static 'css/styles.css'  %}" rel="stylesheet" />
         <link href="{% static 'css/login.css'  %}" rel="stylesheet" />
+
         <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
 
@@ -50,9 +51,7 @@
 
 <a href="{% url 'cart' %}" class="btn btn-outline-dark"><i class="bi-cart-fill me-1"></i>
                         Cart
-<span class="badge bg-dark text-white ms-1 rounded-pill" id="qty-cart">{{ cart|length }}
-
-</span></a>
+                        <span class="badge bg-dark text-white ms-1 rounded-pill" id="cart_quantity">{{ cart_count }}</a>
 
 
                     

@@ -12,9 +12,202 @@
         </div>
     </div>
 </header>
+<br><br>
+<div class="custom-card">
+    <div class="row">
+        <div class="col-md-8 custom-cart">
+            <div class="custom-title">
+                <div class="row">
+                    <div class="col"><h4><b>Shopping Cart</b></h4></div>
+                    <div class="col align-self-center text-right text-muted">3 items</div>
+                </div>
+            </div>
+            {% for product in products %}
+            <div class="row border-top border-bottom">
+                <div class="row custom-main align-items-center">
+                    <div class="col-2"><img class="custom-img" src="https://i.imgur.com/1GrakTl.jpg"></div>
+                    <div class="col">
+                        <div class="row text-muted">{{product.category.cat_name}}</div>
+                        <div class="row">{{product.product_name}}</div>
+                    </div>
+                    <div class="col">
+                        <a href="#">-</a><a href="#" class="border">1</a><a href="#">+</a>
+                    </div>
+                    <div class="col">Pkr {{product.prduct_price}} <span class="custom-close">&#10005;</span></div>
+                </div>
+            </div>
+            {% endfor %}
+
+            <div class="custom-back-to-shop"><a href="{% url 'Home' %}">&leftarrow;</a><span class="text-muted">Back to shop</span></div>
+        </div>
+        <div class="col-md-4 custom-summary">
+            <div><h5><b>Summary</b></h5></div>
+            <hr>
+            <div class="row">
+                <div class="col" style="padding-left:0;">ITEMS 3</div>
+                <div class="col text-right">&euro; 132.00</div>
+            </div>
+            <form class="custom-form">
+                <p>SHIPPING</p>
+                <select><option class="text-muted">Standard-Delivery- &euro;5.00</option></select>
+                <p>GIVE CODE</p>
+                <input id="code" placeholder="Enter your code" class="custom-code">
+            </form>
+            <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
+                <div class="col">TOTAL PRICE</div>
+                <div class="col text-right">Pkr {{total_price}}</div>
+            </div>
+            <button class="custom-btn">CHECKOUT</button>
+        </div>
+    </div>
+</div>
 
 <br><br><br>
     
- 
+<style>
+    /* Custom Card Styles */
+.custom-card {
+    margin: auto;
+    max-width: 950px;
+    width: 90%;
+    box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 1rem;
+    border: transparent;
+}
+
+@media(max-width:767px) {
+    .custom-card {
+        margin: 3vh auto;
+    }
+}
+
+/* Cart Section */
+.custom-cart {
+    background-color: #fff;
+    padding: 4vh 5vh;
+    border-bottom-left-radius: 1rem;
+    border-top-left-radius: 1rem;
+}
+
+@media(max-width:767px) {
+    .custom-cart {
+        padding: 4vh;
+        border-bottom-left-radius: unset;
+        border-top-right-radius: 1rem;
+    }
+}
+
+/* Summary Section */
+.custom-summary {
+    background-color: #ddd;
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+    padding: 4vh;
+    color: rgb(65, 65, 65);
+}
+
+@media(max-width:767px) {
+    .custom-summary {
+        border-top-right-radius: unset;
+        border-bottom-left-radius: 1rem;
+    }
+}
+
+/* Custom Layout for Columns */
+.custom-col-2, .custom-col {
+    padding: 0 1vh;
+}
+
+.row-custom {
+    margin: 0;
+}
+
+/* Product Title */
+.custom-title b {
+    font-size: 1.5rem;
+}
+
+/* Main Section */
+.custom-main {
+    margin: 0;
+    padding: 2vh 0;
+    width: 100%;
+}
+
+/* Close Button Style */
+.custom-close {
+    margin-left: auto;
+    font-size: 0.7rem;
+}
+
+/* Image Style */
+.custom-img {
+    width: 3.5rem;
+}
+
+/* Back to Shop Button */
+.custom-back-to-shop {
+    margin-top: 4.5rem;
+}
+
+/* Form Elements */
+.custom-form select, .custom-form input {
+    border: 1px solid rgba(0, 0, 0, 0.137);
+    padding: 1.5vh 1vh;
+    margin-bottom: 4vh;
+    outline: none;
+    width: 100%;
+    background-color: rgb(247, 247, 247);
+}
+
+.custom-form input:focus::-webkit-input-placeholder {
+    color: transparent;
+}
+
+/* Checkout Button */
+.custom-btn {
+    background-color: #000;
+    border-color: #000;
+    color: white;
+    width: 100%;
+    font-size: 0.7rem;
+    margin-top: 4vh;
+    padding: 1vh;
+    border-radius: 0;
+}
+
+.custom-btn:focus {
+    box-shadow: none;
+    outline: none;
+    box-shadow: none;
+    color: white;
+    -webkit-box-shadow: none;
+    -webkit-user-select: none;
+    transition: none;
+}
+
+.custom-btn:hover {
+    color: white;
+}
+
+/* Link Styles */
+.custom-link {
+    color: black;
+}
+
+.custom-link:hover {
+    color: black;
+    text-decoration: none;
+}
+
+/* Code Input */
+.custom-code {
+    background-image: linear-gradient(to left, rgba(255, 255, 255, 0.253), rgba(255, 255, 255, 0.185)), url("https://img.icons8.com/small/16/000000/long-arrow-right.png");
+    background-repeat: no-repeat;
+    background-position-x: 95%;
+    background-position-y: center;
+}
+
+</style>
 {% endblock %}
 

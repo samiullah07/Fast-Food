@@ -67,7 +67,7 @@
                                 </div>
                                 <!-- Product actions-->
                                 <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                    <div class="text-center"><button class="btn btn-outline-dark mt-auto" id="add-cart" value="{{ pro_obj.id }}">Add to cart</button></div>
+                                    <div class="text-center"><button class="btn btn-outline-dark mt-auto" id="add-cart" data-product-id="{{ pro_obj.id }}">Add to cart</button></div>
                                 </div>
                             </div>
                         </div>
@@ -90,7 +90,7 @@
                     type: 'POST',
                     url: "{% url 'cart_add' %}",
                     data: {
-                product_id: $('#add-cart').val(),
+                product_id: $(this).data('product-id'),
                 // product_qty: $('#qty-cart option:selected').text(),
                 csrfmiddlewaretoken: '{{ csrf_token }}',
                 action: 'post'
@@ -98,7 +98,8 @@
             
                     success: function(json){
                         console.log(json)
-                        // document.getElementById("cart_quantity").textContent = json.qty
+                         document.getElementById("cart_quantity").textContent = json.qty
+                       
                         // location.reload();
                     },
             

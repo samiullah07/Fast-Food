@@ -64,6 +64,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'cart.context_preprocessing.cart'
             ],
         },
     },
@@ -142,3 +143,24 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # For production (run `coll
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),  # 'static' is the folder where you'll put your CSS, JS, and image files
 ]
+
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'debug.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
