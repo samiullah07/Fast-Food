@@ -68,3 +68,25 @@ def update_cart(request):
         logger.error(f"Error in cart_add: {str(e)}")
         return JsonResponse({'error': str(e)}, status=500)
     
+
+def delete_item(request):
+    
+    try:
+        cart = Cart(request)
+        
+        if request.POST.get('action') == 'post':
+            product_id = request.POST.get('product_id')
+            
+           
+            cart.delete_product(product=product_id)
+            cart_qty = cart.__len__()
+
+            response = JsonResponse({"Product deleted " : product_id})
+            
+            return response
+              
+    except Exception as e:
+        logger.error(f"Error in cart_add: {str(e)}")
+        return JsonResponse({'error': str(e)}, status=500)
+	
+    

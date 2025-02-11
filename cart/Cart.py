@@ -48,4 +48,11 @@ class Cart():
 
         update_cart = self.cart
         return update_cart
+    
+    def delete_product(self,product):
+        product_id = str(product)
         
+        if product_id in self.cart:
+            del self.cart[product_id]
+            
+        self.save()        
