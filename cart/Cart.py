@@ -10,11 +10,11 @@ class Cart():
         
 
 
-    def add(self, product):
+    def add(self, product,product_qty):
         product_id = str(product.id)
         
         if product_id not in self.cart:
-            self.cart[product_id] = {"price": str(product.prduct_price), "quantity": 1}
+            self.cart[product_id] = int(product_qty)
         else:
             self.cart[product_id]["quantity"] = self.cart[product_id].get("quantity", 0) + 1
 
@@ -30,3 +30,7 @@ class Cart():
         product_ids = self.cart.keys()
         products = ProductDetail.objects.filter(id__in=product_ids)
         return products
+    
+    def get_quantities(self):
+        quantities = self.cart
+        return quantities

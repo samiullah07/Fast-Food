@@ -11,10 +11,22 @@ def cart_summary(request):
     cart = Cart(request)
 
     products = cart.get_prods()
+    total_items = len(products)
+   
+
     total_price = sum(product.prduct_price for product in products)
+    quantities = cart.get_quantities()
+    print(quantities)
+    
+    context = {
+        "products":products,
+        "quantities" :quantities,
+        "total_price" : total_price
+        
+	}
 
 
-    return render(request, "cart.html",{"products":products,"total_price":total_price})
+    return render(request, "cart.html",{"context":context})
 
 
 
@@ -26,10 +38,10 @@ def cart_add(request):
         
         if request.POST.get('action') == 'post':
             product_id = request.POST.get('product_id')
+            product_qty = request.POST.get("qty-cart")
             product = get_object_or_404(ProductDetail, id=product_id)
-            cart.add(product=product)
+            cart.add(product=product,product_qty = product_qty)
             cart_qty = cart.__len__()
-            print(cart_qty)
             return JsonResponse({"food": product.product_name, "qty": cart_qty})
     except Exception as e:
         logger.error(f"Error in cart_add: {str(e)}")
