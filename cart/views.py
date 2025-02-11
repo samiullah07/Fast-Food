@@ -16,12 +16,12 @@ def cart_summary(request):
 
     total_price = sum(product.prduct_price for product in products)
     quantities = cart.get_quantities()
-    print(quantities)
     
     context = {
         "products":products,
         "quantities" :quantities,
-        "total_price" : total_price
+        "total_price" : total_price,
+        "total_items" : total_items
         
 	}
 
@@ -33,6 +33,7 @@ def cart_summary(request):
 logger = logging.getLogger(__name__)
 
 def cart_add(request):
+    
     try:
         cart = Cart(request)
         
@@ -42,7 +43,28 @@ def cart_add(request):
             product = get_object_or_404(ProductDetail, id=product_id)
             cart.add(product=product,product_qty = product_qty)
             cart_qty = cart.__len__()
-            return JsonResponse({"food": product.product_name, "qty": cart_qty})
+            response = JsonResponse({"food": product.product_name, "qty": cart_qty})
+            return response
+              
     except Exception as e:
         logger.error(f"Error in cart_add: {str(e)}")
         return JsonResponse({'error': str(e)}, status=500)
+    
+
+
+def update_cart(request):
+    try:
+        cart = Cart(request)
+        
+        if request.POST.get('action') == 'post':
+            product_id = request.POST.get('product_id')
+            product_qty = request.POST.get("product_qty")
+            cart.cart_update(product=product_id,quantity=product_qty
+)
+            response = JsonResponse({"Quantity " : product_qty})
+            return response
+              
+    except Exception as e:
+        logger.error(f"Error in cart_add: {str(e)}")
+        return JsonResponse({'error': str(e)}, status=500)
+    

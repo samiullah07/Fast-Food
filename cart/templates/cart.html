@@ -19,7 +19,7 @@
             <div class="custom-title">
                 <div class="row">
                     <div class="col"><h4><b>Shopping Cart</b></h4></div>
-                    <div class="col align-self-center text-right text-muted">{{total_items}} items</div>
+                    <div class="col align-self-center text-right text-muted">{{context.total_items}} items</div>
                 </div>
             </div>
             {% for product in context.products %}
@@ -33,7 +33,7 @@
                     <div class="col">
                         {% for key, value in context.quantities.items %}
                             {% if key == product.id|slugify %}
-                            <input type="number" name="" id="qty-cart" min="1" style="width: 50px;" 
+                            <input type="number" name="" id="qty-cart{{product.id}}" min="1" style="width: 50px;" 
                             value="{{ value.quantity }}">
                             {% endif %}
                         {% endfor %}
@@ -41,6 +41,12 @@
                     </div>
             
                     <div class="col">Pkr {{product.prduct_price}} <span class="custom-close">&#10005;</span></div>
+                    <div class="col">
+
+                        <button type="button" class="btn btn-primary" id="update-cart" data-index="{{product.id}}">Update</button>
+                        <button type="button" class="btn btn-danger " id="delete-cart" data-index="{{product.id}}">Delete</button>
+
+                    </div>
                 </div>
             </div>
             {% endfor %}
@@ -216,5 +222,48 @@
 }
 
 </style>
+
+
+<script>
+    // Check if button pressed
+    $(document).on('click', '#update-cart', function(e){
+        e.preventDefault();
+        id = $(this).data('index')
+ 
+        $.ajax({
+            type: 'POST',
+            url: "{% url 'update' %}",
+            data: {
+        product_id: id ,
+        product_qty: $('#qty-cart'+id).val(),
+        csrfmiddlewaretoken: '{{ csrf_token }}',
+        action: 'post'
+            },
+    
+            success: function(json){
+                console.log(json)
+                 document.getElementById("cart_quantity").textContent = json.qty
+               
+                // location.reload();
+            },
+    
+            error: function(xhr, errmsg, err){
+                console.log(errmsg, err)
+    
+            }
+    
+    
+        });
+    
+
+    
+    
+    })
+    
+    
+    
+    
+</script>
+
 {% endblock %}
 

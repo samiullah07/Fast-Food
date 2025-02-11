@@ -11,12 +11,15 @@ class Cart():
 
 
     def add(self, product,product_qty):
+        if product_qty is None or not product_qty.isdigit():
+            product_qty = 1 
+        
         product_id = str(product.id)
         
         if product_id not in self.cart:
-            self.cart[product_id] = int(product_qty)
+            self.cart[product_id] = {"price": str(product.prduct_price), "quantity": int(product_qty)}
         else:
-            self.cart[product_id]["quantity"] = self.cart[product_id].get("quantity", 0) + 1
+            self.cart[product_id]["quantity"] = self.cart[product_id].get("quantity", 0) + int(product_qty)
 
         self.save()
 
@@ -34,3 +37,15 @@ class Cart():
     def get_quantities(self):
         quantities = self.cart
         return quantities
+    
+    def cart_update(self,product,quantity):
+        product_id = str(product)
+        product_qty = int(quantity)
+        ourcart = self.cart
+        ourcart[product_id]["quantity"] = product_qty
+        
+        self.session.modified = True
+
+        update_cart = self.cart
+        return update_cart
+        
