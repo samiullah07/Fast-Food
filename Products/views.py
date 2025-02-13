@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from django.http import JsonResponse
 from .models import *
 from django.contrib.auth import login, authenticate, logout
-from .forms import SignUpForm
+from .forms import SignUpForm,UpdateUserForm
 from django.contrib import messages
 
 # Create your views here.
@@ -103,6 +103,27 @@ def RegisterPage(request):
             return redirect('register')  # Redirect back to register
     else:
         return render(request, 'register.html', {'form': form})
+
+def User_Profile(request):
+    if request.user.is_authenticated:
+        current_user = User.objects.get(id = request.user.id)
+        user_form = UpdateUserForm(request.POST or None, instance=current_user)
+
+        if user_form.is_valid():
+            user_form.save()
+            login(request,current_user)
+            messages.success(request,"User has been updated successfully")
+            return redirect("Home")
+        return render(request,"user_profile.html",{"user_form":user_form})
+    else:
+        messages.error(request,"You need to Login first")
+
+
+
+    
+
+
+
 
 def getApi(request):
     payload = []

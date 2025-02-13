@@ -5,30 +5,44 @@ from Products.models import ProductDetail
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 import logging
-
+from django.contrib import messages
 
 def cart_summary(request):
     cart = Cart(request)
 
     products = cart.get_prods()
-    total_items = len(products)
+    total_price = 0  # Initialize the total price
+    total_quantities = 0
+
+    # Add calculated total price per product
+    for product in products:
+        product_id = str(product.id)
+
+        if product.is_deal:
+                product_price = float(product.deal_price)  # Ensure it's a float
+                quantity = cart.cart.get(product_id, {}).get('quantity', 0)
+                product.total_price = product_price * quantity  # Calculate total price for each product
+                total_price += product.total_price  # Add to overall total price
+                total_quantities += quantity
+        else:
+                product_price = float(product.prduct_price)  # Ensure it's a float
+                quantity = cart.cart.get(product_id, {}).get('quantity', 0)
+                product.total_price = product_price * quantity  # Calculate total price for each product
+                total_price += product.total_price  # Add to overall total price
+                total_quantities += quantity
+
    
 
-    total_price = sum(product.prduct_price for product in products)
     quantities = cart.get_quantities()
-    
+
     context = {
-        "products":products,
-        "quantities" :quantities,
-        "total_price" : total_price,
-        "total_items" : total_items
-        
-	}
+        "products": products,
+        "quantities": quantities,
+        "total_price": total_price,
+        "total_quantities" : total_quantities
+    }
 
-
-    return render(request, "cart.html",{"context":context})
-
-
+    return render(request, "cart.html", {"context": context})
 
 logger = logging.getLogger(__name__)
 
@@ -44,6 +58,7 @@ def cart_add(request):
             cart.add(product=product,product_qty = product_qty)
             cart_qty = cart.__len__()
             response = JsonResponse({"food": product.product_name, "qty": cart_qty})
+            messages.success(request,"Product added to card successfully")
             return response
               
     except Exception as e:
@@ -62,6 +77,8 @@ def update_cart(request):
             cart.cart_update(product=product_id,quantity=product_qty
 )
             response = JsonResponse({"Quantity " : product_qty})
+            messages.success(request,"Product Updated successfully")
+
             return response
               
     except Exception as e:
@@ -81,7 +98,9 @@ def delete_item(request):
             cart.delete_product(product=product_id)
             cart_qty = cart.__len__()
 
-            response = JsonResponse({"Product deleted " : product_id})
+            response = JsonResponse({"response " : "Product deleted"})
+            messages.success(request,"Product Deleted successfully")
+
             
             return response
               

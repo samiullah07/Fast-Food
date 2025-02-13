@@ -19,7 +19,7 @@
             <div class="custom-title">
                 <div class="row">
                     <div class="col"><h4><b>Shopping Cart</b></h4></div>
-                    <div class="col align-self-center text-right text-muted">{{context.total_items}} items</div>
+                    <div class="col align-self-center text-right text-muted">{{context.total_quantities}} items</div>
                 </div>
             </div>
             {% for product in context.products %}
@@ -40,7 +40,7 @@
                    
                     </div>
             
-                    <div class="col">Pkr {{product.prduct_price}} <span class="custom-close">&#10005;</span></div>
+                    <div class="col">Pkr {{product.total_price}}<span class="custom-close">&#10005;</span></div>
                     <div class="col">
 
                         <button type="button" class="btn btn-primary" id="update-cart" data-index="{{product.id}}">Update</button>
@@ -241,10 +241,11 @@
             },
     
             success: function(json){
-                console.log(json)
                  document.getElementById("cart_quantity").textContent = json.qty
                
-                // location.reload();
+                location.reload();
+                alert("Updated Product successfully")
+
             },
     
             error: function(xhr, errmsg, err){
@@ -276,9 +277,10 @@
             },
     
             success: function(json){
-                console.log(json)
                
                 location.reload();
+                alert("Product Deleted Successfully")
+
             },
     
             error: function(xhr, errmsg, err){
