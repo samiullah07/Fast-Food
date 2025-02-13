@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from django.http import JsonResponse
 from .models import *
 from django.contrib.auth import login, authenticate, logout
-from .forms import SignUpForm,UpdateUserForm
+from .forms import SignUpForm,UpdateUserForm,ChangePasswordForm
 from django.contrib import messages
 
 # Create your views here.
@@ -120,7 +120,30 @@ def User_Profile(request):
 
 
 
-    
+def update_password(request):
+    if request.user.is_authenticated:
+        current_user = request.user
+
+        if request.method == 'POST':
+            form = ChangePasswordForm(current_user,request.POST)
+            if form.is_valid():
+                form.save()
+                messages.success(request,"Password Changed")
+                login(request,current_user)
+                return redirect("Home")
+            else:
+                for error in list(form.errors.values()):
+                    print(error)
+                    return redirect("update_password")
+
+
+        else:
+            form = ChangePasswordForm(current_user)
+            return render(request,"update_password.html",{"form":form})
+
+    else:
+        messages.error(request,"You need to login First")
+        return redirect("Home")
 
 
 

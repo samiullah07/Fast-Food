@@ -14,6 +14,7 @@ urlpatterns = [
     path("register/",RegisterPage,name="register"),
     path("logout'/",LogoutPage,name="logout"),
     path("user_profile/",User_Profile,name="user_profile"),
+    path("update_password/",update_password,name="update_password"),
     path('get-api/',getApi, name='get_api'),
 
     
