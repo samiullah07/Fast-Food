@@ -4,7 +4,16 @@ import datetime
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 
-# Create your models here.
+
+class BaseModel(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    created_at = models.DateField(auto_now_add=True)
+    updated_at = models.DateField(auto_now=True)
+
+    class Meta:
+        abstract = True
+
+
 
 # Create Customer Profile
 class Profile(models.Model):
@@ -33,13 +42,6 @@ def create_profile(sender, instance, created, **kwargs):
 post_save.connect(create_profile, sender=User)
 
 
-class BaseModel(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    created_at = models.DateField(auto_now_add=True)
-    updated_at = models.DateField(auto_now=True)
-
-    class Meta:
-        abstract = True
 
 
 class Category(BaseModel):
@@ -59,7 +61,7 @@ class Customer(BaseModel):
     profile_image = models.ImageField(upload_to="upload/profile", null=True, blank=True)
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+        return f"{self.first_name}"
 
 
 class ProductDetail(BaseModel):
