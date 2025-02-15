@@ -1,16 +1,23 @@
-from Products.models import ProductDetail
+from Products.models import ProductDetail, Profile
 
 class Cart():
     def __init__(self, request):
         self.session = request.session
+        self.request = request
         cart = self.session.get("session_key")
         if "session_key" not in request.session:
             cart = self.session["session_key"] = {}
         self.cart = cart
+
         
 
 
     def add(self, product,product_qty):
+
+       
+
+
+
         if product_qty is None or not product_qty.isdigit():
             product_qty = 1 
         
@@ -23,6 +30,19 @@ class Cart():
 
         self.save()
 
+        if self.request.user.is_authenticated:
+            current_user = Profile.objects.filter(user__id=self.request.user.id)
+
+            carty = self.cart
+
+            simplified_cart = {item_id: item_data["quantity"] for item_id, item_data in carty.items()}
+            simplified_cart = str(simplified_cart)
+            simplified_cart = simplified_cart.replace("\'","\"")
+
+            current_user.update(old_cart=simplified_cart)
+
+
+        
     def __len__(self):
         return sum(item.get('quantity', 0) for item in self.cart.values())
 
