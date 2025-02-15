@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from django.http import JsonResponse
 from .models import *
 from django.contrib.auth import login, authenticate, logout
-from .forms import SignUpForm,UpdateUserForm,ChangePasswordForm
+from .forms import SignUpForm,UpdateUserForm,ChangePasswordForm,UserInfoForm
 from django.contrib import messages
 
 # Create your views here.
@@ -12,10 +12,6 @@ def HomePage(request):
 
     pro_objs = ProductDetail.objects.all()
     
-
-
-
-
 
     return render(request, "Index.html",{"pro_objs":pro_objs})
 
@@ -92,7 +88,7 @@ def RegisterPage(request):
             if user is not None:
                 login(request, user)
                 messages.success(request, "Account created successfully. Welcome!")
-                return redirect('Home')  # Redirect to the home page after login
+                return redirect('user_info')  # Redirect to the home page after login
             else:
                 messages.error(request, "Login failed. Please try again.")
                 return redirect('login')  # Redirect back to login
@@ -146,6 +142,25 @@ def update_password(request):
         return redirect("Home")
 
 
+def user_info(request):
+    if request.user.is_authenticated:
+        current_user = Profile.objects.get(user__id = request.user.id)
+
+        form = UserInfoForm(request.POST or None,instance=current_user)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request,"User Info updated")
+            return redirect("user_info")
+
+
+
+
+
+        return render(request,"user_info.html",{"form":form})
+    
+    else:
+        return redirect("Home")
 
 
 def getApi(request):
