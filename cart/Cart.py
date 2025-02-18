@@ -11,12 +11,30 @@ class Cart():
 
         
 
+    def db_add(self,product_id,quantity):
+
+        product_id = str(product_id)
+        
+        if product_id not in self.cart:
+            self.cart[product_id] = {"quantity": int(quantity)}
+        else:
+            self.cart[product_id]["quantity"] = self.cart[product_id].get("quantity", 0) + int(quantity)
+
+        self.save()
+
+        if self.request.user.is_authenticated:
+            current_user = Profile.objects.filter(user__id=self.request.user.id)
+
+            carty = self.cart
+
+            simplified_cart = {item_id: item_data["quantity"] for item_id, item_data in carty.items()}
+            simplified_cart = str(simplified_cart)
+            simplified_cart = simplified_cart.replace("\'","\"")
+
+            current_user.update(old_cart=simplified_cart)
+
 
     def add(self, product,product_qty):
-
-       
-
-
 
         if product_qty is None or not product_qty.isdigit():
             product_qty = 1 
@@ -75,4 +93,16 @@ class Cart():
         if product_id in self.cart:
             del self.cart[product_id]
             
-        self.save()        
+        self.save() 
+        
+        if self.request.user.is_authenticated:
+            current_user = Profile.objects.filter(user__id=self.request.user.id)
+
+            carty = self.cart
+
+            simplified_cart = {item_id: item_data["quantity"] for item_id, item_data in carty.items()}
+            simplified_cart = str(simplified_cart)
+            simplified_cart = simplified_cart.replace("\'","\"")
+
+            current_user.update(old_cart=simplified_cart)
+              

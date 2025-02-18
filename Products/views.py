@@ -4,7 +4,8 @@ from .models import *
 from django.contrib.auth import login, authenticate, logout
 from .forms import SignUpForm,UpdateUserForm,ChangePasswordForm,UserInfoForm
 from django.contrib import messages
-
+import json
+from cart.Cart import Cart
 # Create your views here.
 
 # @login_required(login_url="/login/")
@@ -47,7 +48,7 @@ def LoginPage(request):
                 converted_cart = json.loads(saved_cart)
                 cart = Cart(request)
                 for key, value in converted_cart.items():
-                    cart.db_add(product=key, quantity=value)
+                    cart.db_add(product_id=key, quantity=value)
             
             messages.success(request, "You have logged in successfully!")
             return redirect('Home')  # Redirect to the home page after successful login
