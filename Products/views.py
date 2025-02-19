@@ -6,6 +6,8 @@ from .forms import SignUpForm,UpdateUserForm,ChangePasswordForm,UserInfoForm
 from django.contrib import messages
 import json
 from cart.Cart import Cart
+from Payment.models import ShippingAddress
+from Payment.shipping_forms import ShipppingForm
 # Create your views here.
 
 # @login_required(login_url="/login/")
@@ -106,6 +108,7 @@ def User_Profile(request):
         current_user = User.objects.get(id = request.user.id)
         user_form = UpdateUserForm(request.POST or None, instance=current_user)
 
+
         if user_form.is_valid():
             user_form.save()
             login(request,current_user)
@@ -149,8 +152,16 @@ def user_info(request):
 
         form = UserInfoForm(request.POST or None,instance=current_user)
 
+        
+        #Shipping address form and user
+
+        shipping_user= ShippingAddress.objects.get(id = request.user.id)
+        shipping_form = ShipppingForm(request.POST or None, instance=shipping_user)
+
+
         if form.is_valid():
             form.save()
+            shipping_form.save()
             messages.success(request,"User Info updated")
             return redirect("user_info")
 
@@ -158,7 +169,7 @@ def user_info(request):
 
 
 
-        return render(request,"user_info.html",{"form":form})
+        return render(request,"user_info.html",{"form":form,"shipping_form":shipping_form})
     
     else:
         return redirect("Home")
