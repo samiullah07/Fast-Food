@@ -1,7 +1,6 @@
 from django import forms
 from .models import ShippingAddress
 
-
 class ShipppingForm(forms.ModelForm):
 	full_name = forms.CharField(label="", widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Phone'}), required=False )
 	email = forms.CharField(label="", widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Address 1'}), required=False )
