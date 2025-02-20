@@ -155,7 +155,7 @@ def user_info(request):
         
         #Shipping address form and user
 
-        shipping_user= ShippingAddress.objects.get(id = request.user.id)
+        shipping_user= ShippingAddress.objects.get(user__id = request.user.id)
         shipping_form = ShipppingForm(request.POST or None, instance=shipping_user)
 
 

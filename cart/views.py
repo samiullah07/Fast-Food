@@ -7,6 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 import logging
 from django.contrib import messages
 
+
 def cart_summary(request):
     cart = Cart(request)
 

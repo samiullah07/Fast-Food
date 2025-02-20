@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- Header-->
+        <header class="bg-dark py-5">
+            <div class="container px-4 px-lg-5 my-5">
+                <div class="text-center text-white">
+                    <h1 class="display-4 fw-bolder">Checkout</h1>
+                    <p class="lead fw-normal text-white-50 mb-0">Make your Order </p>
+                </div>
+            </div>
+        </header>
+
+        <div class="container">
+        	<div class="row">
+        		
+        			<div class="col-md-6 offset-md-3">
+                             <h1>Shipping Information</h1>
+        				<br/><br/>
+
+<form method="POST" action="{% url 'checkout' %}">
+    {% csrf_token %}
+    
+    {{ shipping_form.as_p }}
+    <br/><br/>
+    <button type="submit" class="btn btn-secondary">
+      Confirm Order
+    </button>
+    <a href="{% url 'user_info' %}" class="btn btn-primary"> Change shipping address</a>
+  
+</form>
+
+<br/><br/>
+<br/><br/>
+<br/><br/>
+<br/><br/>
+<br/><br/>
+<br/><br/>
+<br/><br/>
+        			</div>
+        		
+        	</div>
+        </div>
+
+{% endblock %}
